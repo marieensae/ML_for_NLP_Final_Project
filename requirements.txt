@@ -1,0 +1,8 @@
+spacy
+bertopic
+adjustText
+boto3
+pandas
+s3fs
+requests
+gensim
