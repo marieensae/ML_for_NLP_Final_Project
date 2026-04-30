@@ -26,8 +26,8 @@ COMPRENDRE LES PROJECTIONS 2D :
   │  UMAP (Uniform Manifold Approximation and Projection) :                 │
   │    • Alternative à t-SNE, plus rapide et plus stable.                   │
   │    • Préserve MIEUX la structure globale que t-SNE.                     │
-  │    • ✅  Les distances inter-clusters ont plus de sens qu'en t-SNE.     │
-  │    • ✅  Reproductible (random_state fixé).                             │
+  │    • Les distances inter-clusters ont plus de sens qu'en t-SNE.         │
+  │    • Reproductible (random_state fixé).                                 │
   │    • Paramètre clé : n_neighbors (structure locale vs globale).         │
   │                                                                         │
   │  LECTURE DU GRAPHIQUE :                                                 │
@@ -70,21 +70,13 @@ import nltk
 from nltk.corpus import stopwords
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.decomposition import NMF, PCA
-from sklearn.manifold import TSNE
+from sklearn.feature_extraction.text import CountVectorizer
 import umap
 import spacy
 from hdbscan import HDBSCAN
 import string
-from collections import Counter
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib.pyplot as plt
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.corpora import Dictionary
-import pandas as pd
 
 
 warnings.filterwarnings("ignore")
@@ -116,6 +108,7 @@ PALETTE_PARTIS = {
 GLOBAL_COLOR_MAP = {}
 PALETTE_DYNAMIQUE = itertools.cycle(sns.color_palette("tab20", 20))
 
+
 def obtenir_couleur_parti(nom_parti):
     if nom_parti in GLOBAL_COLOR_MAP:
         return GLOBAL_COLOR_MAP[nom_parti]
@@ -132,6 +125,7 @@ def obtenir_couleur_parti(nom_parti):
 # ─────────────────────────────────────────────────────────────────────────────
 # CHARGEMENT DES RESSOURCES NLP
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 try:
     nltk.data.find("corpora/stopwords")
@@ -272,6 +266,7 @@ def construire_url_to_parti(liste_fichiers, df_meta):
 # ─────────────────────────────────────────────────────────────────────────────
 # PRÉPARATION DES DONNÉES POUR UNE ANNÉE
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 def charger_annee(annee, df_meta, cache_csv=True):
     dossier = os.path.join(REPERTOIRE_BASE, f"legislatives_{annee}")
@@ -705,7 +700,7 @@ def optimiser_nombre_topics(documents, embeddings, annee, range_topics=[5, 10, 1
     plt.show()
 
     best_k = range_topics[coherence_scores.index(max(coherence_scores))]
-    print(f" ✅ Le score de cohérence maximal est de {max(coherence_scores):.3f} pour {best_k} thèmes.")
+    print(f" Le score de cohérence maximal est de {max(coherence_scores):.3f} pour {best_k} thèmes.")
     
     return best_k
 # ─────────────────────────────────────────────────────────────────────────────
@@ -714,7 +709,7 @@ def optimiser_nombre_topics(documents, embeddings, annee, range_topics=[5, 10, 1
 
 
 def generer_statistiques_descriptives(df_metadata, annee):
-    print(f"📊 Génération des statistiques descriptives pour {annee}...")
+    print(f" Génération des statistiques descriptives pour {annee}...")
 
     # 1. Préparation des données
     documents, _, partis = _lire_documents(df_metadata)
@@ -788,7 +783,7 @@ def generer_statistiques_descriptives(df_metadata, annee):
     # Sauvegarde finale
     output_path = f"statistiques_descriptives_{annee}.png"
     plt.savefig(output_path, dpi=180, bbox_inches="tight")
-    print(f"✅ Tableau de bord statistique sauvegardé : {output_path}")
+    print(f" Tableau de bord statistique sauvegardé : {output_path}")
     plt.close()
 
 
@@ -872,7 +867,7 @@ def generer_graphique_distribution(df, theme_labels, annee):
     plt.tight_layout()
     filename = f"distribution_themes_{annee}.png"
     plt.savefig(filename, dpi=300, bbox_inches='tight')
-    print(f" 📊 Graphique de distribution sauvegardé : {filename}")
+    print(f"  Graphique de distribution sauvegardé : {filename}")
     
     plt.show()
 
@@ -933,7 +928,7 @@ def main():
             output_file=f"comparaison_{'_'.join(str(a) for a in sorted(resultats.keys()))}.png",
         )
     elif args.comparaison and len(resultats) <= 1:
-        print("⚠  La comparaison temporelle nécessite au moins 2 années avec des données.")
+        print("  La comparaison temporelle nécessite au moins 2 années avec des données.")
 
     print("\n✓ Analyse terminée.")
 
